@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mystery Tiles</title>
+</head>
+<body>
+    <a href="aboutme.html">About Me</a><br>
+    <a href="resume.html">Resume</a><br>
+    <a href="../index.html" id="top">Home</a> |
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Matching Tile Game - Sea Creatures</title>
+        <style>
+            body {
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                font-family: Arial, sans-serif;
+                background-color: #1e90ff;
+                color: white;
+            }
+    
+            .game-container {
+                display: grid;
+                grid-template-columns: repeat(4, 100px);
+                grid-gap: 10px;
+            }
+    
+            .tile {
+                width: 100px;
+                height: 100px;
+                background-color: #008080;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 36px;
+                color: white;
+                border: 2px solid #004d4d;
+                cursor: pointer;
+                transition: transform 0.2s;
+                border-radius: 10px;
+            }
+    
+            .tile.flipped {
+                background-color: #e0ffff;
+                color: #000;
+                cursor: default;
+                transform: rotateY(180deg);
+            }
+    
+            .tile.matched {
+                background-color: #00fa9a;
+                color: white;
+                cursor: default;
+            }
+    
+            .score {
+                margin-bottom: 20px;
+                font-size: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="score">Score: 0</div>
+        <div class="game-container"></div>
+        <script>
+            const gameContainer = document.querySelector('.game-container');
+            const scoreDisplay = document.querySelector('.score');
+    
+            // Sea creature icons
+            const seaCreatures = ['🐙', '🐠', '🦀', '🐬', '🦈', '🐢', '🦑', '🐡'];
+            let tiles = [...seaCreatures, ...seaCreatures];
+            tiles.sort(() => Math.random() - 0.5);
+    
+            let flippedTiles = [];
+            let matchedTiles = 0;
+            let score = 0;
+    
+            // Create tile elements
+            tiles.forEach((icon, index) => {
+                const tile = document.createElement('div');
+                tile.classList.add('tile');
+                tile.dataset.icon = icon;
+                tile.dataset.index = index;
+                tile.innerHTML = '&#x1F30A;'; // Default "hidden" state (wave emoji)
+                tile.addEventListener('click', flipTile);
+                gameContainer.appendChild(tile);
+            });
+    
+            function flipTile() {
+                if (flippedTiles.length === 2 || this.classList.contains('flipped') || this.classList.contains('matched')) {
+                    return;
+                }
+    
+                this.classList.add('flipped');
+                this.innerHTML = this.dataset.icon;
+                flippedTiles.push(this);
+    
+                if (flippedTiles.length === 2) {
+                    checkMatch();
+                }
+            }
+    
+            function checkMatch() {
+                const [tile1, tile2] = flippedTiles;
+                if (tile1.dataset.icon === tile2.dataset.icon) {
+                    tile1.classList.add('matched');
+                    tile2.classList.add('matched');
+                    matchedTiles += 2;
+                    score += 10;
+                    checkWin();
+                } else {
+                    setTimeout(() => {
+                        tile1.classList.remove('flipped');
+                        tile2.classList.remove('flipped');
+                        tile1.innerHTML = '&#x1F30A;';
+                        tile2.innerHTML = '&#x1F30A;';
+                    }, 1000);
+                    score -= 5;
+                }
+                flippedTiles = [];
+                updateScore();
+            }
+    
+            function updateScore() {
+                scoreDisplay.textContent = `Score: ${score}`;
+            }
+    
+            function checkWin() {
+                if (matchedTiles === tiles.length) {
+                    setTimeout(() => {
+                        alert(`Congratulations! You matched all sea creatures with a score of ${score}!`);
+                        resetGame();
+                    }, 500);
+                }
+            }
+    
+            function resetGame() {
+                gameContainer.innerHTML = '';
+                flippedTiles = [];
+                matchedTiles = 0;
+                score = 0;
+                updateScore();
+                tiles.sort(() => Math.random() - 0.5);
+                tiles.forEach((icon, index) => {
+                    const tile = document.createElement('div');
+                    tile.classList.add('tile');
+                    tile.dataset.icon = icon;
+                    tile.dataset.index = index;
+                    tile.innerHTML = '&#x1F30A;';
+                    tile.addEventListener('click', flipTile);
+                    gameContainer.appendChild(tile);
+                });
+            }
+        </script>
+    </body>
+    </html>
+</body>
+</html>
+<br>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/MSqiSnFSZZo?si=k02huuX9E-VEaJPI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<br>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/5CbRcgWfJlo?si=UIIDhD10A-Q88UAo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+
